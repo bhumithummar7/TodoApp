@@ -1,0 +1,48 @@
+//
+//  ToDoItemModel.swift
+//  ToDoWidgetExtension
+//
+//  Created by Bhumi Thummar on 08/05/25.
+//
+
+import Foundation
+import SwiftData
+import SwiftUI
+@Model
+class ToDoItem {
+    var taskID: String
+    var title: String
+    var isCompleted: Bool = false
+    var dueDate: Date = Date.now
+    var priority: Priority = Priority.normal
+    init(title: String, dueDate: Date?, isCompleted: Bool = false,priority: Priority) {
+        self.taskID = UUID().uuidString
+        self.title = title
+        self.dueDate = dueDate ?? Date()
+        self.isCompleted = isCompleted
+        self.priority = priority
+    }
+}
+/// Priority Status
+enum Priority: String, Codable, CaseIterable {
+    case normal = "Normal"
+    case medium = "Medium"
+    case high = "High"
+    /// Priority Color
+    var color: Color {
+        switch self {
+            case .normal:
+                return .green
+            case .medium:
+                return .yellow
+            case .high:
+                return .red
+        }
+    }
+}
+
+extension ToDoItem {
+    var completedSortValue: Int {
+        return isCompleted ? 1 : 0
+    }
+}
