@@ -69,8 +69,16 @@ struct ToDoWidgetEntryView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(filteredItems.prefix(5)) { todo in // Show top 5 (can be adjusted)
-                        VStack{
+                VStack(spacing:2){
+                    HStack{
+                        Text("Today's Task")
+                            .font(.system(size: 12,weight: .semibold))
+                            .lineLimit(1)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                    ForEach(filteredItems.prefix(4)) { todo in // Show top 5 (can be adjusted)
+                        VStack(spacing:0){
                             HStack(spacing: 8) {
                                 Button(intent: ToggleButton(id: todo.taskID)) {
                                     Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle")
@@ -82,25 +90,18 @@ struct ToDoWidgetEntryView: View {
                                 .font(.callout)
                                 Text(todo.title)
                                     .foregroundColor(todo.priority.color)
-                                    .font(.system(size: 16,weight: .medium))
+                                    .font(.system(size: 12,weight: .medium))
                                     .lineLimit(1)
                                 Spacer()
-                                HStack{
-                                    Text(todo.dueDate, style: .time)
-                                        .font(.caption)
-                                        .foregroundColor(.gray)
-                                }
                             }.padding(.horizontal)
                         }
-                        .frame(height: 30)
                         .background(todo.priority.color.opacity(0.1))
-                            .cornerRadius(5)
-                            .padding(.bottom, 2)
-                    
+                        .cornerRadius(5)
+                        .padding(.bottom,2)
+                    }
                 }
             }
         }
-        .padding()
     }
 
     static var todoDescriptor: FetchDescriptor<ToDoItem> {

