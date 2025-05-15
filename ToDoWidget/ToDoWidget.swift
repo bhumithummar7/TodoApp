@@ -37,70 +37,119 @@ struct SimpleEntry: TimelineEntry {
 // MARK: - Widget View
 struct ToDoWidgetEntryView: View {
     var entry: Provider.Entry
-    
-    /// Query that fetches all todos based on a specific date (defaults to today if no date passed)
+
     @Query(Self.todoDescriptor, animation: .snappy) private var todosForDate: [ToDoItem]
-    
-    // Filter today's, tomorrow's, and past todos
+
     private var filteredItems: [ToDoItem] {
         let calendar = Calendar.current
         let now = calendar.startOfDay(for: Date())
         var filtered: [ToDoItem] = []
-        
+
         for todo in todosForDate {
             let dueDate = calendar.startOfDay(for: todo.dueDate)
-            
-            if entry.date == now { // Today
+            if entry.date == now {
                 filtered.append(todo)
-            } else if dueDate > now { // Future
+            } else if dueDate > now {
                 filtered.append(todo)
-            } else { // Past
+            } else {
                 filtered.append(todo)
             }
         }
-        
-        return filtered.sorted { ($0.dueDate) > ($1.dueDate) }
+        return filtered.sorted { $0.dueDate < $1.dueDate }
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            if filteredItems.isEmpty {
-                Text("No Tasks Today 🎉")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } else {
-                VStack(spacing:2){
-                    HStack{
-                        Text("Today's Task")
-                            .font(.system(size: 12,weight: .semibold))
-                            .lineLimit(1)
-                            .multilineTextAlignment(.leading)
-                        Spacer()
+        ZStack {
+            // Gradient background
+//            LinearGradient(
+//                gradient: Gradient(colors: [Color.blue.opacity(0.15), Color.purple.opacity(0.10)]),
+//                startPoint: .topLeading,
+//                endPoint: .bottomTrailing
+//            )
+//            .ignoresSafeArea()
+            
+            entry.date.backgroundImageName
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+            
+            // Dark overlay to improve text visibility
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.black.opacity(0.8),
+                            Color.black.opacity(0.6)
+                        ]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+                .ignoresSafeArea()
+            
+//            entry.date.backgroundGradient
+//                    .ignoresSafeArea()
+
+            VStack(alignment: .leading, spacing: 0) {
+                Text("Hii").frame(height: 12).foregroundColor(Color.clear)
+                HStack {
+//                    Image(systemName: "checklist")
+//                        .foregroundColor(.accentColor)
+//                        .font(.system(size: 16, weight: .bold))
+                    Text(" 📋 Today's Tasks")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundColor(.primary)
+                    Spacer()
+                }
+                Divider()
+                    .background(Color.white.opacity(0.25))
+                    .frame(height: 1)
+                    .padding(.top, 4)
+                    .padding(.bottom, -5)
+                if filteredItems.isEmpty {
+                    VStack(spacing: 4) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 18))
+                            .foregroundColor(.secondary)
+                        Text("No Tasks Today!")
+                            .font(.callout)
+                            .foregroundColor(.secondary)
                     }
-                    ForEach(filteredItems.prefix(4)) { todo in // Show top 5 (can be adjusted)
-                        VStack(spacing:0){
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    VStack(spacing: -6) {
+                        ForEach(filteredItems.prefix(5)) { todo in
                             HStack(spacing: 8) {
                                 Button(intent: ToggleButton(id: todo.taskID)) {
-                                    Image(systemName: todo.isCompleted ? "checkmark.circle.fill" : "circle")
-                                        .foregroundColor(todo.isCompleted ? .green : Color.kBlack)
+                                    Image(systemName: todo.isCompleted ? "checkmark" : "square")
+                                        .foregroundColor(todo.isCompleted ? .green : .gray)
+                                        .font(.system(size: 16,weight: .bold))
                                 }
-                                .frame(width: 30,height: 30)
-                                .tint(.clear)//tint(todo.isCompleted ? .green : .gray)
-                                .buttonBorderShape (.circle)
-                                .font(.callout)
-                                Text(todo.title)
-                                    .foregroundColor(todo.priority.color)
-                                    .font(.system(size: 12,weight: .medium))
-                                    .lineLimit(1)
+                                .buttonStyle(.plain)
+                                .frame(width: 24, height: 24)
+
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text(todo.title)
+                                        .font(.system(size: 12, weight: .semibold))
+                                        .foregroundColor(.primary)
+                                        .lineLimit(1)
+                                }
                                 Spacer()
-                            }.padding(.horizontal)
+                                Circle()
+                                    .fill(todo.priority.color)
+                                    .frame(width: 7, height: 7)
+                            }
+                            .padding(.vertical, 4)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.clear)
+                            )
                         }
-                        .background(todo.priority.color.opacity(0.1))
-                        .cornerRadius(5)
-                        .padding(.bottom,2)
                     }
                 }
+                Spacer()
             }
+            .padding(.horizontal)
         }
     }
 
@@ -108,16 +157,12 @@ struct ToDoWidgetEntryView: View {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: Date())
         let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-        
-        // You can adjust the predicate to match the passed date if you want to make the date dynamic
         let predicate = #Predicate<ToDoItem> {
             $0.dueDate >= startOfDay && $0.dueDate < endOfDay
         }
-        
         let sort = [SortDescriptor(\ToDoItem.dueDate, order: .forward)]
         return FetchDescriptor(predicate: predicate, sortBy: sort)
     }
-
 }
 
 
@@ -131,6 +176,7 @@ struct ToDoWidget: Widget {
                 .containerBackground(.fill.tertiary, for: .widget)
                 .modelContainer(for: ToDoItem.self)
         }.supportedFamilies([.systemMedium])
+            .disableContentMarginsIfNeeded()
     }
 }
 
@@ -167,3 +213,84 @@ struct ToggleButton: AppIntent {
     }
 }
 
+extension WidgetConfiguration {
+    func disableContentMarginsIfNeeded() -> some WidgetConfiguration {
+        if #available(iOSApplicationExtension 17.0, *) {
+            return self.contentMarginsDisabled()
+        } else {
+            return self
+        }
+    }
+}
+extension Date {
+    var backgroundGradient: LinearGradient {
+        let weekday = Calendar.current.component(.weekday, from: self)
+
+        switch weekday {
+        case 1: // Sunday
+                return LinearGradient(
+                gradient: Gradient(colors: [Color.orange.opacity(0.25), Color.pink.opacity(0.2)]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        case 2:
+            return LinearGradient(
+                gradient: Gradient(colors: [Color.black.opacity(0.3), Color.gray.opacity(0.2)]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        case 3:
+            return LinearGradient(
+                gradient: Gradient(colors: [Color.indigo.opacity(0.25), Color.teal.opacity(0.15)]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        case 4:
+            return  LinearGradient(
+                gradient: Gradient(colors: [Color.mint.opacity(0.3), Color.cyan.opacity(0.2)]),
+                startPoint: .topTrailing,
+                endPoint: .bottomLeading
+            )
+        case 5:
+                return LinearGradient(
+                    gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.2)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+        case 6:
+            return LinearGradient(
+                gradient: Gradient(colors: [Color(hue: 0.72, saturation: 0.6, brightness: 0.4).opacity(0.4), Color(hue: 0.6, saturation: 0.2, brightness: 0.3).opacity(0.3)]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        default:
+            return LinearGradient(
+                gradient: Gradient(colors: [Color(hue: 0.38, saturation: 0.6, brightness: 0.3).opacity(0.4), Color(hue: 0.65, saturation: 0.5, brightness: 0.25).opacity(0.3)]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+    }
+    
+    var backgroundImageName: Image {
+        let weekday = Calendar.current.component(.weekday, from: self)
+
+        switch weekday {
+        case 1: // Sunday
+                return  Image("widget_1")
+
+        case 2:
+                return Image("widget_2")
+        case 3:
+                return Image("widget_3")
+        case 4:
+                return Image("widget_4")
+        case 5:
+                return Image("widget_5")
+        case 6:
+                return Image("widget_6")
+        default:
+                return Image("widget_7")
+        }
+    }
+}
