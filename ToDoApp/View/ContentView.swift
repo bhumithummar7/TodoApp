@@ -26,6 +26,7 @@ struct ContentView: View {
     @Environment(\.scenePhase) var scenePhase
     @State private var refreshID = UUID()
     @State private var selectedFilter: ToDoFilter = .today
+    @State private var showingSettings = false
 
     var filteredItems: [ToDoItem] {
         let now = Calendar.current.startOfDay(for: Date())
@@ -104,6 +105,15 @@ struct ContentView: View {
             }
             .navigationTitle("To-Do List")
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        showingSettings = true
+                    }) {
+                        Image(systemName: "gearshape")
+                            .imageScale(.large)
+                            .foregroundColor(Color.black)
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         AlertGlobal.showAlertWithActionWithCancel(
@@ -132,6 +142,9 @@ struct ContentView: View {
             .sheet(isPresented: $showingAddView) {
                 AddToDoView(todoItem: selectedToDoItem)
                     .environment(\.modelContext, modelContext)
+            }
+            .fullScreenCover(isPresented: $showingSettings) {
+                SettingsView()
             }
             .onChange(of: scenePhase) {
                 switch scenePhase {

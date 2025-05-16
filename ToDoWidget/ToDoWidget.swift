@@ -60,42 +60,54 @@ struct ToDoWidgetEntryView: View {
 
     var body: some View {
         ZStack {
-            // Gradient background
-//            LinearGradient(
-//                gradient: Gradient(colors: [Color.blue.opacity(0.15), Color.purple.opacity(0.10)]),
-//                startPoint: .topLeading,
-//                endPoint: .bottomTrailing
-//            )
-//            .ignoresSafeArea()
             
-            entry.date.backgroundImageName
-                .resizable()
-                .scaledToFill()
-                .ignoresSafeArea()
+            if let settings = loadWidgetSettings() {
+                if settings.backgroundType == .none {
+                    Color.black.ignoresSafeArea().zIndex(-1)
+                }
+                else if settings.backgroundType == .gradient {
+                    if settings.gradientMode == .selectOne, let idx = settings.selectedGradientIndex {
+                        // Use gradients[idx]
+                        WidgetSettingsManager.shared.gradients[idx]
+                    } else {
+                        entry.date.backgroundGradient
+                            .ignoresSafeArea()
+                            .zIndex(-1)
+                    }
+                } else if settings.backgroundType == .photo, let photoData = settings.selectedPhotoData,photoData.count > 0 {
+                    let weekday = Calendar.current.component(.weekday, from: entry.date)
+                    if let uiImage = UIImage(data: photoData[photoData.count == 7 ? (weekday - 1) % 7 :  abs(Int(entry.date.timeIntervalSince1970 / 86400)) % photoData.count]) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFill()
+                            .ignoresSafeArea()
+                        
+                        // Dark overlay to improve text visibility
+                        Rectangle()
+                            .fill(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [
+                                        Color.black.opacity(0.8),
+                                        Color.black.opacity(0.6)
+                                    ]),
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                            .ignoresSafeArea()
+                    }
+                }
+                else{
+                    entry.date.backgroundGradient
+                        .ignoresSafeArea()
+                        .zIndex(-1)
+                }
+            }
             
-            // Dark overlay to improve text visibility
-            Rectangle()
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color.black.opacity(0.8),
-                            Color.black.opacity(0.6)
-                        ]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-                .ignoresSafeArea()
-            
-//            entry.date.backgroundGradient
-//                    .ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 0) {
                 Text("Hii").frame(height: 12).foregroundColor(Color.clear)
                 HStack {
-//                    Image(systemName: "checklist")
-//                        .foregroundColor(.accentColor)
-//                        .font(.system(size: 16, weight: .bold))
                     Text(" 📋 Today's Tasks")
                         .font(.system(size: 13, weight: .bold))
                         .foregroundColor(.primary)
@@ -162,6 +174,11 @@ struct ToDoWidgetEntryView: View {
         }
         let sort = [SortDescriptor(\ToDoItem.dueDate, order: .forward)]
         return FetchDescriptor(predicate: predicate, sortBy: sort)
+    }
+    
+    
+    func loadWidgetSettings() -> WidgetSettings? {
+        WidgetSettingsManager.shared.load()
     }
 }
 
@@ -271,26 +288,5 @@ extension Date {
             )
         }
     }
-    
-    var backgroundImageName: Image {
-        let weekday = Calendar.current.component(.weekday, from: self)
 
-        switch weekday {
-        case 1: // Sunday
-                return  Image("widget_1")
-
-        case 2:
-                return Image("widget_2")
-        case 3:
-                return Image("widget_3")
-        case 4:
-                return Image("widget_4")
-        case 5:
-                return Image("widget_5")
-        case 6:
-                return Image("widget_6")
-        default:
-                return Image("widget_7")
-        }
-    }
 }
