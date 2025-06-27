@@ -20,6 +20,8 @@ struct EditWidgetView: View {
     @State private var selectSpecificGradient = true
     @State private var imageToCrop: UIImage?
     @State private var showCropper = false
+    @State private var specificPhoto: Bool = true
+
     var body: some View {
             Form {
                 Picker("Background Type", selection: $selection) {
@@ -67,12 +69,24 @@ struct EditWidgetView: View {
                         }
                     }
                 } else  if selection == .photo {
-                    // Photo selection section (as in previous answer)
-                    Section(header: Text("Max 7 photos allowed").font(.subheadline).foregroundColor(.secondary)) {
+                    Section(header: Text(specificPhoto ? "Select one photo" : "Max 7 photos allowed").font(.subheadline).foregroundColor(.secondary)) {
+                        Toggle(isOn: $specificPhoto) {
+                            Text("Specific Photo")
+                        }
+                        .toggleStyle(SwitchToggleStyle())
+                        .onChange(of: specificPhoto) { newValue,_ in
+                                selectedPhotos = []
+                                
+                                let settings = WidgetSettingsManager.shared.load()
+                                if let photoData = settings.selectedPhotoData {
+                                    let arrImages = photoData.compactMap { UIImage(data: $0) }
+                                    selectedPhotos = specificPhoto ? ([arrImages.first ?? UIImage()]) : arrImages
+                                }
+                        }
+                        
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 16) {
-                                // Plus button (only show if less than 7 photos)
-                                if selectedPhotos.count < 7 {
+                                if (specificPhoto && selectedPhotos.count < 1) || (!specificPhoto && selectedPhotos.count < 7) {
                                     PhotosPicker(
                                         selection: $photoItems,
                                         maxSelectionCount: 1,
@@ -101,7 +115,9 @@ struct EditWidgetView: View {
                                     .fullScreenCover(isPresented: $showCropper) {
                                         if let imageToCrop = imageToCrop {
                                             CropView(image: imageToCrop) { croppedImage in
-                                                if selectedPhotos.count < 7 {
+                                                if specificPhoto {
+                                                    selectedPhotos = [croppedImage]
+                                                } else if selectedPhotos.count < 7 {
                                                     selectedPhotos.append(croppedImage)
                                                 }
                                             }
@@ -147,7 +163,8 @@ struct EditWidgetView: View {
                                 backgroundType: selection,
                                 gradientMode: selectSpecificGradient ? .selectOne : .randomWeekly,
                                 selectedGradientIndex: selectSpecificGradient ? selectedGradient : nil,
-                                selectedPhotoData: selection == .photo ? compressedPhotos.compactMap { $0 } : nil
+                                selectedPhotoData: selection == .photo ? compressedPhotos.compactMap { $0 } : nil,
+                                specificPhoto: selection == .photo ? specificPhoto : nil // Add this if you want to save the toggle state
                             )
                             WidgetSettingsManager.shared.save(settings)
                             WidgetCenter.shared.reloadAllTimelines()
@@ -164,6 +181,7 @@ struct EditWidgetView: View {
                 if let photoData = settings.selectedPhotoData {
                     selectedPhotos = photoData.compactMap { UIImage(data: $0) }
                 }
+                specificPhoto = settings.specificPhoto ?? true // Default to true if not set
             }
     }
 }

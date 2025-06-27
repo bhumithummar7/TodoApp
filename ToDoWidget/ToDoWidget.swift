@@ -43,16 +43,17 @@ struct ToDoWidgetEntryView: View {
     private var filteredItems: [ToDoItem] {
         let calendar = Calendar.current
         let now = calendar.startOfDay(for: Date())
-        var filtered: [ToDoItem] = []
-
-        for todo in todosForDate {
+        // Only include todos that are NOT completed
+        let pendingTodos = todosForDate.filter { !$0.isCompleted }
+        // Optionally, filter by date if needed (as before)
+        let filtered = pendingTodos.filter { todo in
             let dueDate = calendar.startOfDay(for: todo.dueDate)
             if entry.date == now {
-                filtered.append(todo)
+                return true
             } else if dueDate > now {
-                filtered.append(todo)
+                return true
             } else {
-                filtered.append(todo)
+                return true
             }
         }
         return filtered.sorted { $0.dueDate < $1.dueDate }
@@ -133,8 +134,8 @@ struct ToDoWidgetEntryView: View {
                         ForEach(filteredItems.prefix(5)) { todo in
                             HStack(spacing: 8) {
                                 Button(intent: ToggleButton(id: todo.taskID)) {
-                                    Image(systemName: todo.isCompleted ? "checkmark" : "square")
-                                        .foregroundColor(todo.isCompleted ? .green : .gray)
+                                    Image(systemName: todo.isCompleted ? "checkmark" : "circle")
+                                        .foregroundColor(todo.isCompleted ? .green : .white)
                                         .font(.system(size: 16,weight: .bold))
                                 }
                                 .buttonStyle(.plain)
@@ -143,7 +144,7 @@ struct ToDoWidgetEntryView: View {
                                 VStack(alignment: .leading, spacing: 1) {
                                     Text(todo.title)
                                         .font(.system(size: 12, weight: .semibold))
-                                        .foregroundColor(.primary)
+                                        .foregroundColor(todo.priority.color)
                                         .lineLimit(1)
                                 }
                                 Spacer()

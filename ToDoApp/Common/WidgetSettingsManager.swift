@@ -21,6 +21,7 @@ struct WidgetSettings: Codable {
     var gradientMode: GradientMode = .randomWeekly
     var selectedGradientIndex: Int?
     var selectedPhotoData: [Data]? // Store images as Data
+    var specificPhoto: Bool? 
 }
 
 class WidgetSettingsManager {
