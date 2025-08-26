@@ -81,8 +81,9 @@ struct ContentView: View {
                                             .tint(.red)
 
                                             Button {
+//                                                selectedToDoItem = item
+//                                                showingAddView.toggle()
                                                 selectedToDoItem = item
-                                                showingAddView.toggle()
                                             } label: {
                                                 Label("Edit", systemImage: "pencil")
                                             }
@@ -132,8 +133,8 @@ struct ContentView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        showingAddView.toggle()
                         selectedToDoItem = nil
+                        showingAddView.toggle()
                     }) {
                         Label("Add", systemImage: "plus")
                     }
@@ -141,6 +142,10 @@ struct ContentView: View {
             }
             .sheet(isPresented: $showingAddView) {
                 AddToDoView(todoItem: selectedToDoItem)
+                    .environment(\.modelContext, modelContext)
+            }
+            .sheet(item: $selectedToDoItem) { todo in
+                AddToDoView(todoItem: todo)
                     .environment(\.modelContext, modelContext)
             }
             .fullScreenCover(isPresented: $showingSettings) {
@@ -191,13 +196,16 @@ struct ContentView: View {
         }
 
         return grouped
+            // sort todos inside each section: latest first
             .mapValues { $0.sorted { $0.dueDate > $1.dueDate } }
+            // sort sections: latest date first
             .sorted { a, b in
-                let d1 = a.value.first?.dueDate ?? .distantFuture
-                let d2 = b.value.first?.dueDate ?? .distantFuture
-                return d1 < d2
+                let d1 = a.value.first?.dueDate ?? .distantPast
+                let d2 = b.value.first?.dueDate ?? .distantPast
+                return d1 > d2
             }
     }
+
 
 
     private func deleteToDoItem(_ item: ToDoItem) {
