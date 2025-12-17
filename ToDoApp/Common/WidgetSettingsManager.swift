@@ -76,7 +76,7 @@ class WidgetSettingsManager {
             defaults?.set(data, forKey: key)
         }
     }
-    
+
     func load() -> WidgetSettings {
         guard let data = defaults?.data(forKey: key),
               let settings = try? JSONDecoder().decode(WidgetSettings.self, from: data) else {
